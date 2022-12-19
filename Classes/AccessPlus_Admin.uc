@@ -1735,7 +1735,12 @@ exec function ShowTags(optional int rad, optional Class<Actor> ClassName)
     ClientMessage(string(ActorCount) @ "Actors," @ string(TagCount) @ "Tags");
 }
 
-exec function ListPlayerID()
+final exec function ListPlayerIDs()
+{
+    GetID();
+}
+
+exec function GetID()
 {
     local Controller C;
 
