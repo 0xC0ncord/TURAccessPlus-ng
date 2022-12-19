@@ -53,7 +53,7 @@ struct sMapName
         bUseFadingColors,
         bReplaceMapPrefixs;
 
-    var color MapNameColors[2]; // Fade 0 to 1, use 0 if bUseFadingColors == False
+    var color MapNameColors[2]; // Fade 0 to 1, use 0 if bUseFadingColors == false
     var array<sReplaceMapPrefix> MapPrefixs;
 };
 
@@ -95,42 +95,42 @@ var() config array<sMapActors> MapActors;
 // Initialize Mutator
 function PreBeginPlay()
 {
-    Log( "", Name );
-    Log( "================================================", Name );
-    Log( "=========="     $Name@Version$      "===========", Name );
-    Log( "================================================", Name );
-    Log( "", Name );
+    Log("", Name);
+    Log("================================================", Name);
+    Log("=========="     $Name@Version$      "===========", Name);
+    Log("================================================", Name);
+    Log("", Name);
 
     ScanServerPackages();
 
-     if( Level.Game.AccessControl != None )
+     if(Level.Game.AccessControl != None)
          Level.Game.AccessControl.Destroy();
 
-     Level.Game.AccessControl = Spawn( Class'AccessPlus_Control', Level.Game );
+     Level.Game.AccessControl = Spawn(Class'AccessPlus_Control', Level.Game);
 }
 
 function PostBeginPlay()
 {
-    if( AccessPlus_Control(Level.Game.AccessControl) != None )
+    if(AccessPlus_Control(Level.Game.AccessControl) != None)
     {
         Control = AccessPlus_Control(Level.Game.AccessControl);
         Control.MyMutator = Self;
 
-         CurrentMapName = string( Outer.Name );
+         CurrentMapName = string(Outer.Name);
 
-        if( ServerNameSettings.bColorServerName )
-            NewServerName = ConvertStringToColoredString( Class'GameReplicationInfo'.Default.ServerName, ServerNameSettings.ServerNameColors );
-        else if( ServerNameSettings.bNoFadingColors )
-            NewServerName = ReplacePriorityColors( ServerNameSettings.ServerNameForNoFadingColors );
+        if(ServerNameSettings.bColorServerName)
+            NewServerName = ConvertStringToColoredString(Class'GameReplicationInfo'.Default.ServerName, ServerNameSettings.ServerNameColors);
+        else if(ServerNameSettings.bNoFadingColors)
+            NewServerName = ReplacePriorityColors(ServerNameSettings.ServerNameForNoFadingColors);
 
-        if( bBroadcastServerDownloads )
-            SetTimer( 3, True );
+        if(bBroadcastServerDownloads)
+            SetTimer(3, true);
 
         LoadMapActors();
     }
     else
     {
-        Log( "AccessPlus_Control is none!", Name );
+        Log("AccessPlus_Control is none!", Name);
         Destroy();
         return;
     }
@@ -142,18 +142,18 @@ final protected function LoadMapActors()
     local class<Actor> SpawnActor;
 
     NumMapActors = MapActors.Length;
-    if( NumMapActors == 0 )
+    if(NumMapActors == 0)
         return;
 
-    for( CurMapActor = 0; CurMapActor < NumMapActors; ++ CurMapActor )
+    for(CurMapActor = 0; CurMapActor < NumMapActors; ++ CurMapActor)
     {
-        if( MapActors[CurMapActor].MapName ~= CurrentMapName )
+        if(MapActors[CurMapActor].MapName ~= CurrentMapName)
         {
-            SpawnActor = Class<Actor>(DynamicLoadObject( MapActors[CurMapActor].ActorClass, Class'Class', False ));
-            if( SpawnActor == None )
+            SpawnActor = Class<Actor>(DynamicLoadObject(MapActors[CurMapActor].ActorClass, Class'Class', false));
+            if(SpawnActor == None)
                 continue;
 
-            Spawn( SpawnActor, Level, 'MapActor', MapActors[CurMapActor].Location, MapActors[CurMapActor].Rotation );
+            Spawn(SpawnActor, Level, 'MapActor', MapActors[CurMapActor].Location, MapActors[CurMapActor].Rotation);
         }
     }
 }
@@ -168,7 +168,7 @@ final function int CountDownloaders()
     local FileChannel FC;
     local int i;
 
-    ForEach AllObjects( Class'FileChannel', FC )
+    foreach AllObjects(Class'FileChannel', FC)
         i ++;
 
     return i;
@@ -179,7 +179,7 @@ final function int CountDownloaders()
  * SLOW
  ** .:..:
  */
-final function GetSocketsCon( out array<AccessPlus.SocketDataPacketType> Sockets )
+final function GetSocketsCon(out array<AccessPlus.SocketDataPacketType> Sockets)
 {
     local NetConnection N;
     local int i,j,ii,Te,Fi,Ac,Ot,CNum;
@@ -187,9 +187,9 @@ final function GetSocketsCon( out array<AccessPlus.SocketDataPacketType> Sockets
     local string IP,PLName,PLType,SIP,FileName;
     local array<ClientListType> LIST;
 
-    ForEach AllObjects(Class'NetConnection',N)
+    foreach AllObjects(Class'NetConnection',N)
     {
-        if( N.Actor!=None )
+        if(N.Actor!=None)
         {
             LIST.Length = i+1;
             LIST[i].IP = N.Actor.GetPlayerNetworkAddress();
@@ -197,8 +197,8 @@ final function GetSocketsCon( out array<AccessPlus.SocketDataPacketType> Sockets
             i++;
         }
     }
-    Split(ConsoleCommand("Sockets",False)," Client ",S);
-    For( i=1; i<S.Length; i++ )
+    Split(ConsoleCommand("Sockets",false)," Client ",S);
+    For(i=1; i<S.Length; i++)
     {
         ii = InStr(S[i]," ");
         SIP = Left(S[i],ii);
@@ -206,7 +206,7 @@ final function GetSocketsCon( out array<AccessPlus.SocketDataPacketType> Sockets
         ii = InStr(S[i]," ");
         IP = Left(S[i],ii);
         S[i] = Mid(S[i],ii+1);
-        if( S[i]=="" )
+        if(S[i]=="")
             Continue; // Bad result...
         Split(S[i],"  Channel ",C);
         Te = 0;
@@ -214,24 +214,24 @@ final function GetSocketsCon( out array<AccessPlus.SocketDataPacketType> Sockets
         Fi = 0;
         Ot = 0;
         FileName = "";
-        For( j=1; j<C.Length; j++ )
+        For(j=1; j<C.Length; j++)
         {
             ii = InStr(C[j],": ");
             C[j] = Mid(C[j],ii+2);
-            if( Left(C[j],4)~="Text" )
+            if(Left(C[j],4)~="Text")
                 Te++;
-            else if( Left(C[j],5)~="Actor" )
+            else if(Left(C[j],5)~="Actor")
                 Ac++;
-            else if( Left(C[j],4)~="File" )
+            else if(Left(C[j],4)~="File")
             {
                 Fi++;
-                if( FileName=="" )
+                if(FileName=="")
                 {
                     FileName = Mid(C[j],6);
                     ii = InStr(FileName,"',");
                     FileName = Left(FileName,ii);
                     ii = InStr(FileName,"/");
-                    While( ii!=-1 )
+                    While(ii!=-1)
                     {
                         FileName = Mid(FileName,ii+1);
                         ii = InStr(FileName,"/");
@@ -241,12 +241,12 @@ final function GetSocketsCon( out array<AccessPlus.SocketDataPacketType> Sockets
             else Ot++;
         }
         PLName = "Unknown";
-        if( Ac>0 ) // Active client
+        if(Ac>0) // Active client
         {
             PLType = "Active";
-            For( ii=0; ii<LIST.Length; ii++ )
+            For(ii=0; ii<LIST.Length; ii++)
             {
-                if( LIST[ii].IP==IP )
+                if(LIST[ii].IP==IP)
                 {
                     PLName = LIST[ii].Name;
                     Break;
@@ -255,11 +255,11 @@ final function GetSocketsCon( out array<AccessPlus.SocketDataPacketType> Sockets
         }
         else
         {
-            if( Fi>0 )
+            if(Fi>0)
                 PLType = "Downloader";
             else PLType = "Inactive";
 
-            if( bBroadcastConnectingPlayerName )
+            if(bBroadcastConnectingPlayerName)
                 PLName = Control.FindNameByIP(SIP);
         }
         Sockets.Length = CNum+1;
@@ -291,51 +291,51 @@ function Timer()
     local string Msg;
 
     c = CountDownloaders();
-    if( c == OldDLersCount )
+    if(c == OldDLersCount)
         return;
 
-    if( bBroadcastDownloadingFileName )
+    if(bBroadcastDownloadingFileName)
     {
-        if( c==0 )
+        if(c==0)
         {
             Level.Game.Broadcast(Self,"Note: All server downloaders are gone now.");
             Log("All downloaders finished now",Name);
-            SetTimer(3,True);
-            if( bBroadcastDownloadingFileName )
+            SetTimer(3,true);
+            if(bBroadcastDownloadingFileName)
                 OldDownloaders.Length = 0;
             OldDLersCount = 0;
-            Return;
+            return;
         }
-        else if( OldDLersCount==0 )
-            SetTimer(1,True);
+        else if(OldDLersCount==0)
+            SetTimer(1,true);
         GetSocketsCon(S);
-        For( i=0; i<S.Length; i++ ) // Broadcast only changed downloads
+        For(i=0; i<S.Length; i++) // Broadcast only changed downloads
         {
-            if( S[i].FileChannels==0 || S[i].DLFile=="" )
+            if(S[i].FileChannels==0 || S[i].DLFile=="")
             {
                 S.Remove(i,1);
                 i--;
             }
         }
-        For( i=0; i<OldDownloaders.Length; i++ )
+        For(i=0; i<OldDownloaders.Length; i++)
         {
-            bFounded = False;
-            For( j=0; j<S.Length; j++ )
+            bFounded = false;
+            For(j=0; j<S.Length; j++)
             {
-                if( S[j].PlayerIP==OldDownloaders[i] )
+                if(S[j].PlayerIP==OldDownloaders[i])
                 {
-                    bFounded = True;
+                    bFounded = true;
                     Break;
                 }
             }
-            if( !bFounded )
+            if(!bFounded)
             {
                 OldDownloaders.Remove(i,1);
                 i--;
             }
             else S.Remove(j,1);
         }
-        For( i=0; i<S.Length; i++ )
+        For(i=0; i<S.Length; i++)
         {
             Msg = "Lag alert:"@S[i].PlayerName@"is downloading"@S[i].DLFile@"off server, lag may occurr!";
             Log(Msg,Name);
@@ -343,17 +343,17 @@ function Timer()
             OldDownloaders[OldDownloaders.Length] = S[i].PlayerIP;
         }
     }
-    else if( OldDLersCount<c )
+    else if(OldDLersCount<c)
     {
         Level.Game.Broadcast(Self,"Lag alert: a client is downloading off server, lag may occurr!");
-        if( OldDLersCount==0 )
-            SetTimer(1,True);
+        if(OldDLersCount==0)
+            SetTimer(1,true);
     }
-    else if( c==0 )
+    else if(c==0)
     {
         Level.Game.Broadcast(Self,"Note: All server downloaders are gone.");
-        SetTimer(3,True);
-        if( bBroadcastDownloadingFileName )
+        SetTimer(3,true);
+        if(bBroadcastDownloadingFileName)
             OldDownloaders.Length = 0;
     }
     OldDLersCount = c;
@@ -370,18 +370,18 @@ final private function ScanServerPackages() // Force a security scan that noob a
     local bool bChan;
     local GameEngine GE;
 
-    For( i=0; i<Class'GameEngine'.Default.ServerPackages.Length; i++ )
+    For(i=0; i<Class'GameEngine'.Default.ServerPackages.Length; i++)
     {
-        if( Class'GameEngine'.Default.ServerPackages[i]~="AccessPlus" )
+        if(Class'GameEngine'.Default.ServerPackages[i]~="AccessPlus")
         {
             Class'GameEngine'.Default.ServerPackages.Remove(i,1);
-            bChan = True;
+            bChan = true;
         }
     }
-    if( !bChan ) Return;
+    if(!bChan) return;
     Warn("AccessPlus was found in serverpackages!");
     Class'GameEngine'.Static.StaticSaveConfig();
-    ForEach AllObjects(Class'GameEngine',GE)
+    foreach AllObjects(Class'GameEngine',GE)
     {
         GE.ServerPackages = Class'GameEngine'.Default.ServerPackages;
         GE.SaveConfig();
@@ -389,7 +389,7 @@ final private function ScanServerPackages() // Force a security scan that noob a
 }
 
 // from GameInfo, but tweaked
-final static function string MakeColorCode( color NewColor )
+final static function string MakeColorCode(color NewColor)
 {
     // Text colours use 1 as 0.
     if(NewColor.R == 0)
@@ -416,7 +416,7 @@ final static function string MakeColorCode( color NewColor )
     return Chr(0x1B)$Chr(NewColor.R)$Chr(NewColor.G)$Chr(NewColor.B);
 }
 
-final static function string ConvertStringToColoredString( string StringToConvert, color FadeColors[2] )
+final static function string ConvertStringToColoredString(string StringToConvert, color FadeColors[2])
 {
     local vector A, B, NewColor;
     local string ConvertedString;
@@ -434,15 +434,15 @@ final static function string ConvertStringToColoredString( string StringToConver
     B.Z = FadeColors[0].B;
 
     // Check length and alpha fade speed
-    StringLength = Len( StringToConvert );
+    StringLength = Len(StringToConvert);
     SavedStringLength = StringLength;
 
     // Add alpha fading
-    while( StringLength > 0 )
+    while(StringLength > 0)
     {
-        if( Left( StringToConvert, 1 ) == " " )
+        if(Left(StringToConvert, 1) == " ")
             ConvertedString $= " ";
-        else if( Left( StringToConvert, 1 ) == "'" )
+        else if(Left(StringToConvert, 1) == "'")
             ConvertedString $= "'";
         else
         {
@@ -450,76 +450,76 @@ final static function string ConvertStringToColoredString( string StringToConver
             FadeColors[1].R = NewColor.X;
             FadeColors[1].G = NewColor.Y;
             FadeColors[1].B = NewColor.Z;
-            if( OldColor == FadeColors[1] )
-                ConvertedString $= Left( StringToConvert, 1 );
+            if(OldColor == FadeColors[1])
+                ConvertedString $= Left(StringToConvert, 1);
             else
             {
-                ConvertedString $= MakeColorCode( FadeColors[1] )$Left( StringToConvert, 1 );
+                ConvertedString $= MakeColorCode(FadeColors[1])$Left(StringToConvert, 1);
                 OldColor = FadeColors[1];
             }
         }
-        StringToConvert = Mid( StringToConvert, 1 );
+        StringToConvert = Mid(StringToConvert, 1);
         StringLength --;
     }
     return ConvertedString;
 }
 
 // Eliot
-function bool CheckReplacement( Actor Other, out byte bSuperRelevant )
+function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 {
-    if( Other.IsA('UTServerAdminSpectator') )
+    if(Other.IsA('UTServerAdminSpectator'))
     {
         WebAdmin = UTServerAdminSpectator(Other);
-        return True;
+        return true;
     }
-    else if( Other.IsA('PlayerController') )
+    else if(Other.IsA('PlayerController'))
     {
-        PostLogin( PlayerController(Other) );
-        return True;
+        PostLogin(PlayerController(Other));
+        return true;
     }
-    return True;
+    return true;
 }
 
-function PostLogin( PlayerController PC )
+function PostLogin(PlayerController PC)
 {
 }
 
 // Eliot
-function GetServerDetails( out GameInfo.ServerResponseLine ServerState )
+function GetServerDetails(out GameInfo.ServerResponseLine ServerState)
 {
     local int CurPrefix, MaxPrefix;
 
     Super.GetServerDetails(ServerState);
-    Level.Game.AddServerDetail( ServerState, "AccessPlus", "Version:"@Version );
+    Level.Game.AddServerDetail(ServerState, "AccessPlus", "Version:"@Version);
 
-    if( Len( NewMapName ) == 0 )
+    if(Len(NewMapName) == 0)
     {
-        NewMapName = Level.Game.StripColor( ServerState.MapName );
-         if( MapNameSettings.bReplaceMapPrefixs && MapNameSettings.MapPrefixs.Length > 0 )
+        NewMapName = Level.Game.StripColor(ServerState.MapName);
+         if(MapNameSettings.bReplaceMapPrefixs && MapNameSettings.MapPrefixs.Length > 0)
         {
             MaxPrefix = MapNameSettings.MapPrefixs.Length;
-            for( CurPrefix = 0; CurPrefix < MaxPrefix; CurPrefix ++ )
+            for(CurPrefix = 0; CurPrefix < MaxPrefix; CurPrefix ++)
             {
-                if( MapNameSettings.MapPrefixs[CurPrefix].SearchPrefix == Level.Game.MapPrefix )
+                if(MapNameSettings.MapPrefixs[CurPrefix].SearchPrefix == Level.Game.MapPrefix)
                 {
-                    NewMapName = MapNameSettings.MapPrefixs[CurPrefix].NewPrefix$Mid( NewMapName, InStr( NewMapName, "-" ) ) ;
+                    NewMapName = MapNameSettings.MapPrefixs[CurPrefix].NewPrefix$Mid(NewMapName, InStr(NewMapName, "-")) ;
                     break;
                 }
             }
         }
 
-        if( MapNameSettings.bColorMapName )
+        if(MapNameSettings.bColorMapName)
         {
-            if( MapNameSettings.bUseFadingColors )
-                NewMapName = ConvertStringToColoredString( NewMapName, MapNameSettings.MapNameColors );
-            else NewMapName = MakeColorCode( MapNameSettings.MapNameColors[0] )$NewMapName;
+            if(MapNameSettings.bUseFadingColors)
+                NewMapName = ConvertStringToColoredString(NewMapName, MapNameSettings.MapNameColors);
+            else NewMapName = MakeColorCode(MapNameSettings.MapNameColors[0])$NewMapName;
         }
     }
 
-    if( Len( NewMapName ) > 0 )
+    if(Len(NewMapName) > 0)
         ServerState.MapName = NewMapName;
 
-    if( Len( NewServerName ) > 0 )
+    if(Len(NewServerName) > 0)
         ServerState.ServerName = NewServerName;
 }
 
@@ -530,31 +530,31 @@ function GetServerDetails( out GameInfo.ServerResponseLine ServerState )
 // {R,G,B} = Add color tag in desired color
 // {MAP} = Map title
 // {FILE} = Map file name
-function string ReplacePriorityColors( string OrginalStr, optional string GameName )
+function string ReplacePriorityColors(string OrginalStr, optional string GameName)
 {
     local int i,j;
     local string S,F,M;
     local Color C;
 
-    While( True )
+    While(true)
     {
         i = InStr(OrginalStr,"{");
-        if( i==-1 )
-            Return F$OrginalStr;
+        if(i==-1)
+            return F$OrginalStr;
         F = F$Left(OrginalStr,i);
         S = Mid(OrginalStr,i+1);
         j = InStr(S,"}");
-        if( j==-1 )
+        if(j==-1)
             OrginalStr = S;
         else
         {
             OrginalStr = Mid(S,j+1);
             S = Left(S,j);
-            if( S~="GAME" )
+            if(S~="GAME")
                 F = F$GameName;
-            else if( S~="MAP" )
+            else if(S~="MAP")
                 F = F$Level.Title;
-            else if( S~="File" )
+            else if(S~="File")
             {
                 M = string(Self);
                 M = Left(M,InStr(M,"."));
@@ -566,14 +566,14 @@ function string ReplacePriorityColors( string OrginalStr, optional string GameNa
                 C.G = 0;
                 C.B = 0;
                 i = InStr(S,",");
-                if( i==-1 )
+                if(i==-1)
                     C.R = byte(S);
                 else
                 {
                     C.R = byte(Left(S,i));
                     S = Mid(S,i+1);
                     i = InStr(S,",");
-                    if( i==-1 )
+                    if(i==-1)
                         C.G = byte(S);
                     else
                     {
@@ -587,13 +587,13 @@ function string ReplacePriorityColors( string OrginalStr, optional string GameNa
     }
 }
 
-DefaultProperties
+defaultproperties
 {
     bBroadcastServerDownloads=True
     bBroadcastDownloadingFileName=True
     bBroadcastConnectingPlayerNames=True
     bBroadcastConnectingPlayerName=True
 
-    MapNameSettings=(bColorMapName=True,bUseFadingColors=True,bReplaceMapPrefixs=False,MapNameColors[0]=(R=255,G=0,B=0,A=255),MapNameColors[1]=(R=0,G=255,B=0,A=255))
-    ServerNameSettings=(bColorServerName=True,ServerNameColors[0]=(R=0,G=0,B=255,A=255),ServerNameColors[1]=(R=255,G=0,B=0,A=255))
+    MapNameSettings=(bColorMapName=true,bUseFadingColors=true,bReplaceMapPrefixs=False,MapNameColors[0]=(R=255,G=0,B=0,A=255),MapNameColors[1]=(R=0,G=255,B=0,A=255))
+    ServerNameSettings=(bColorServerName=true,ServerNameColors[0]=(R=0,G=0,B=255,A=255),ServerNameColors[1]=(R=255,G=0,B=0,A=255))
 }
