@@ -229,200 +229,200 @@ exec function Help(string S)
     }
 
     HelpMessage("<> = Required, || = Optional, ** = Global admin command");
-    switch(S)
+    switch(Caps(S))
     {
         // Global Admin                                                       \\
-        case "GetGlobalAdminPassword":
+        case "GETGLOBALADMINPASSWORD":
             CmdHelpMessage("** "$S, "- Displays current global admin password");
             break;
 
-        case "SetGlobalAdminPassword":
+        case "SETGLOBALADMINPASSWORD":
             CmdHelpMessage("** "$S, "<string GlobalPassword> - Changes the current global admin password");
             break;
 
-        case "CreateAdminAccount":
+        case "CREATEADMINACCOUNT":
             CmdHelpMessage("** "$S, "<string PlayerID> - Create an admin account");
             break;
 
-        case "DeleteAdminAccount":
+        case "DELETEADMINACCOUNT":
             CmdHelpMessage("** "$S, "<int AdminSlot> - Delete an admin account");
             break;
 
-        case "NameAdminAccount":
+        case "NAMEADMINACCOUNT":
             CmdHelpMessage("** "$S, "<int AdminSlot> <string AdminName> - Change an admin account's name");
             CmdHelpMessage("Alternative Command", "SetACName");
             break;
 
-        case "PasswordAdminAccount":
+        case "PASSWORDADMINACCOUNT":
             CmdHelpMessage("** "$S, "<int AdminSlot> <string AdminPassword> - Change an admin account's password");
             CmdHelpMessage("Alternative Command", "SetACPass");
             break;
 
-        case "PrivilegesAdminAccount":
+        case "PRIVILEGESADMINACCOUNT":
             CmdHelpMessage("** "$S, "<int AdminSlot> <string Privileges> - Changes an admin account's privileges");
             CmdHelpMessage("** "$S, "<int AdminSlot> <All> - To block all admin commands for this admin account");
             CmdHelpMessage("Alternative Command", "SetACPriv");
             break;
 
-        case "ListAdminAccounts":
+        case "LISTADMINACCOUNTS":
             CmdHelpMessage("** "$S, "<None> - Displays a list of all admin accounts with info");
             break;
         //                                                                      \\
 
         // Gameplay affecting commands                                          \\
-        case "Fly":
+        case "FLY":
             CmdHelpMessage(S, "|string PlayerID| - Target player will feel lighter");
             CmdHelpMessage(S, "|Self| - Will automatically target you");
             break;
 
-        case "Ghost":
+        case "GHOST":
             CmdHelpMessage(S, "|string PlayerID| - Target player will feel etheareal");
             CmdHelpMessage(S, "|Self| - Will automatically target you");
             break;
 
-        case "Spider":
+        case "SPIDER":
             CmdHelpMessage(S, "|string PlayerID| - Target player fingers will feel sticky");
             CmdHelpMessage(S, "|Self| - Will automatically target you");
             break;
 
-        case "Slap":
+        case "SLAP":
             CmdHelpMessage(S, "|string PlayerID| |int SlapDamage| - Slap target player");
             CmdHelpMessage(S, "|Self| - Will automatically target you");
             break;
 
-        case "Rename":
+        case "RENAME":
             CmdHelpMessage(S, "|string PlayerID| <string Name> - Changes target player name");
             CmdHelpMessage(S, "|Self| <Newbie> - Will automatically target you");
             break;
 
-        case "God":
+        case "GOD":
             CmdHelpMessage(S, "|string PlayerID| |bool bGodMode| - Make target player invurnable");
             CmdHelpMessage(S, "|Self| |true| - Will automatically target you");
             break;
 
-        case "HeadSize":
+        case "HEADSIZE":
             CmdHelpMessage(S, "|string PlayerID| <float Size> - Changes target player head size");
             CmdHelpMessage(S, "|Self| <0.25> - Will automatically target you");
             break;
 
-        case "PlayerSize":
+        case "PLAYERSIZE":
             CmdHelpMessage(S, "|string PlayerID| <float Size> - Changes target player body size");
             CmdHelpMessage(S, "|Self| <2.0> - Will automatically target you");
             break;
 
-        case "Invis":
+        case "INVIS":
             CmdHelpMessage(S, "|string PlayerID| - Make target player invisible");
             CmdHelpMessage(S, "|Self| - Will automatically target you");
             break;
 
-        case "Fatality":
+        case "FATALITY":
             CmdHelpMessage(S, "|string PlayerID| - Make target player blow up");
             CmdHelpMessage(S, "|Self| - Will automatically target you");
             break;
 
-        case "ChangeScore":
+        case "CHANGESCORE":
             CmdHelpMessage(S, "|string PlayerID| <int Score> - Changes target player score");
             CmdHelpMessage(S, "|Self| <1337> - Will automatically target you");
             break;
 
-        case "SetGameSpeed":
+        case "SETGAMESPEED":
             CmdHelpMessage(S, "<float SpeedScaling> - Changes the game speed");
             CmdHelpMessage(S, "<1.1> - For default speed scaling");
             break;
 
-        case "SetGravity":
+        case "SETGRAVITY":
             CmdHelpMessage(S, "<float Gravity> - Changes the world gravity");
             CmdHelpMessage(S, "<-950> - For default world gravity");
             break;
 
-        case "Summon":
+        case "SUMMON":
             CmdHelpMessage(S, "<string Class> <string Properties> - Spawns an actor of type <Class>");
             CmdHelpMessage("Example", S@"<RedeemerProjectile> <DrawScale=2/Damage=15>");
             break;
 
-        case "PlayerControl":
+        case "PLAYERCONTROL":
             CmdHelpMessage(S, "|string PlayerID| <string Command> - Make target player execute <Command>");
             CmdHelpMessage(S, "|Self| <Say I'm admin yeah!> - Will automatically target you");
             CmdHelpMessage("Example", S@"<Michael Jackson> <Say Just beat it!>");
             CmdHelpMessage("Alternative Command", "RemotePlayerCommand");
             break;
 
-        case "TeleP":
+        case "TELEP":
             CmdHelpMessage(S, "|string PlayerID| - Teleport target player to you");
             CmdHelpMessage(S, "|Self| - Will automatically target you");
             break;
 
-        case "GotoP":
+        case "GOTOP":
             CmdHelpMessage(S, "|string PlayerID| - Teleport to target player");
             CmdHelpMessage(S, "|Self| - Will automatically target you");
             break;
 
-        case "GotoA":
+        case "GOTOA":
             CmdHelpMessage(S, "|string PlayerID| <name ActorTag> |vector Offset| - Teleport target player to <class ActorToTeleportTo>");
             CmdHelpMessage(S, "|Self| <Mover1> - Will automatically target you");
             break;
 
-        case "Loaded":
+        case "LOADED":
             CmdHelpMessage(S, "|string PlayerID| |bool bSuperWeapons| - Give target player all weapons and full ammo");
             CmdHelpMessage(S, "|Self| |true| - Will automatically target you");
             break;
 
-        case "AllAmmo":
+        case "ALLAMMO":
             CmdHelpMessage(S, "|string PlayerID| - Make target player weapons full loaded");
             CmdHelpMessage(S, "|Self| - Will automatically target you");
             break;
 
-        case "AllWeapons":
+        case "ALLWEAPONS":
             CmdHelpMessage(S, "|string PlayerID| |bool bSuperWeapons| - Give target player all weapons");
             CmdHelpMessage(S, "|Self| |true| - Will automatically target you");
             break;
 
-        case "GiveItem":
+        case "GIVEITEM":
             CmdHelpMessage(S, "|string PlayerID| <class Item> - Give target player an item");
             CmdHelpMessage(S, "|Self| <xWeapons.RocketLauncher> - Will automatically target you");
             break;
 
-        case "SetMonster":
+        case "SETMONSTER":
             CmdHelpMessage(S, "|string PlayerID| <byte MovementType> <class Monster> - Turn target player into an monster");
             CmdHelpMessage(S, "|Self| <0> <Skaarjpack.Warlord> - Will automatically target you");
             CmdHelpMessage("<byte MovementType>", "0 = WalkMode, 1 = FlyMode, 2 = SpiderMode");
             break;
 
-        case "MonsterFire":
+        case "MONSTERFIRE":
             CmdHelpMessage(S, "<None> - Make you fire like a monster");
             break;
 
-        case "SkipObj":
+        case "SKIPOBJ":
             CmdHelpMessage(S, "<None> - Skips the current assault objective");
             break;
 
-        case "CauseEvent":
+        case "CAUSEEVENT":
             CmdHelpMessage(S, "<name ActorTag> - Triggers an actor");
             CmdHelpMessage("Example", S@"<Mover>");
             break;
 
-        case "FreakOut":
+        case "FREAKOUT":
             CmdHelpMessage(S, "|string PlayerID| - Fake master server ban target player");
             break;
 
-        case "AddMadDriver":
+        case "ADDMADDRIVER":
             CmdHelpMessage(S, "<bool bCanFire> <byte AttackMode> <bool bMayIdle> <class Vehicle> - Spawn a vehicle with a mad driver(bot)");
             CmdHelpMessage("<byte AttackMode>", "0 = Strafe around, 1 = Try crush enemies, 2 = Stand still while attacking, 3 = Stay within a radius");
             CmdHelpMessage("Example", S@"<true> <1> <false> <Onslaught.ONSPRV>");
 
-        case "SetTime":
+        case "SETTIME":
             CmdHelpMessage(S, "<float Time(Minutes)> - Sets the RoundTimeLimit of Assault");
             break;
 
-        case "AddTime":
+        case "ADDTIME":
             CmdHelpMessage(S, "<float Time(Minutes)> - Adds time to the RoundTimeLimit of Assault");
             break;
 
-        case "AddMessagePoint":
+        case "ADDMESSAGEPOINT":
             CmdHelpMessage(S, "<string Message> - Add a trigger showing a message on player colliding");
             break;
 
-        case "DestroyActors":
+        case "DESTROYACTORS":
             CmdHelpMessage(S, "<class ClassTypeToDestroy> - Destroys all actors of <class ClassTypeToDestroy>");
             CmdHelpMessage("Alternative Command", "KillAll");
             break;
@@ -431,67 +431,67 @@ exec function Help(string S)
         // Admin server commands                                                \\
 
         // Kick related
-        case "Kick":
+        case "KICK":
             CmdHelpMessage(S, "<string PlayerID> - Kick target player");
             break;
 
-        case "KickBann":
+        case "KICKBANN":
             CmdHelpMessage(S, "<string PlayerID> |Days| - Kick target player for |Days|");
             CmdHelpMessage("|Days|", "0 = Permamently banned, 7 = One week");
             break;
 
-        case "ListBans":
+        case "LISTBANS":
             CmdHelpMessage(S, "<None> - Displays a list of currently banned players");
             break;
 
-        case "ListTempBans":
+        case "LISTTEMPBANS":
             CmdHelpMessage(S, "<None> - Displays a list of currently temporary banned players");
             break;
 
-        case "UnBan":
+        case "UNBAN":
             CmdHelpMessage(S, "<int BanSlot> - UnBan <int BanSlot>");
             break;
 
-        case "UnBanTemp":
+        case "UNBANTEMP":
             CmdHelpMessage(S, "<int TempBanSlot> - UnBanTemp <int TempBanSlot>");
             break;
         //
 
-        case "PrivateMessage":
+        case "PRIVATEMESSAGE":
             CmdHelpMessage(S, "<string PlayerID> <string Message> - Send a private message to target player");
             CmdHelpMessage("Alternative Command", "PSay");
             break;
 
-        case "AdminMessage":
+        case "ADMINMESSAGE":
             CmdHelpMessage(S, "<string Message> - Send a message only admins can see");
             CmdHelpMessage("Alternative Command", "ASay");
             break;
 
-        // Usefull commands                                                        \\
-        case "ShowTags":
+        // Useful commands                                                        \\
+        case "SHOWTAGS":
             CmdHelpMessage(S, "|float Radius| <class Type> - Show actor tags/events of <class Type> within |float Radius|");
             CmdHelpMessage("Example", S@"|1000| <Engine.Mover>");
             break;
 
-        case "GetID":
+        case "GETID":
             CmdHelpMessage(S, "<None> - Displays a id list of the current players");
             CmdHelpMessage("Alternative Command", "ListPlayerIDs");
             break;
 
-        case "GetConnections":
+        case "GETCONNECTIONS":
             CmdHelpMessage(S, "<string Type> - Display connected clients");
             CmdHelpMessage("<string Type>", "All = Display all clients, Active = Display all active clients, InActive = Display all inactive clients, Detail = Display detailed info");
             break;
 
-        case "GetAddress":
+        case "GETADDRESS":
             CmdHelpMessage(S, "<string PlayerID> - Displays GUID and IP of target player");
             break;
 
-        case "ReloadCache":
+        case "RELOADCACHE":
             CmdHelpMessage(S, "<None> - Reload the server cache, e.g to see newly uploaded files without a restart");
             break;
 
-        case "MapVote":
+        case "MAPVOTE":
             CmdHelpMessage(S, "<string Action> - Execute an action in VotingHandler");
             CmdHelpMessage("<string Action>", "Cancel = Cancel the current map votes, Begin = Force mid-game map voting");
             break;
@@ -499,33 +499,32 @@ exec function Help(string S)
         //                                                                      \\
 
         // Server configuration commands                                        \\
-        case "AddServerPackage":
+        case "ADDSERVERPACKAGE":
             CmdHelpMessage(S, "<string PackageName> - Add a serverpackage to the list");
             break;
 
-        case "RemoveServerPackage":
+        case "REMOVESERVERPACKAGE":
             CmdHelpMessage(S, "<string PackageName> - Remove a serverpackage of the list");
             break;
 
-        case "ListServerPackages":
+        case "LISTSERVERPACKAGES":
             CmdHelpMessage(S, "<None> - Displays all current serverpackages");
             break;
 
-        case "Set":
+        case "SET":
             CmdHelpMessage(S, "<string Class> <string Property> <string Value> - Change an actor's property value");
             CmdHelpMessage("Example", S@"<Engine.Pawn> <JumpZ> <1024>");
             break;
 
-        case "SetSave":
+        case "SETSAVE":
             CmdHelpMessage(S, "<string Class> <string Property> <string Value> - Change an actors property value and executes SaveConfig() for <string Class>");
             CmdHelpMessage("Example", S@"<Engine.GameInfo> <TimeLimit> <6000>");
             break;
         //                                                                      \\
 
         default:
-            Note("Found no help info for"@S);
+            Note("No help info found for '" $ S $ "'");
             break;
-
     }
 }
 //==============================================================================
