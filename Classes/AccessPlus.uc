@@ -369,17 +369,20 @@ final private function ScanServerPackages() // Force a security scan that noob a
     local int i;
     local bool bChan;
     local GameEngine GE;
+    local string PackageName;
 
-    For(i=0; i<Class'GameEngine'.Default.ServerPackages.Length; i++)
+    PackageName = Left(Class, InStr(Class, "."));
+
+    for(i=0; i<Class'GameEngine'.Default.ServerPackages.Length; i++)
     {
-        if(Class'GameEngine'.Default.ServerPackages[i]~="AccessPlus")
+        if(Class'GameEngine'.Default.ServerPackages[i]~=PackageName)
         {
             Class'GameEngine'.Default.ServerPackages.Remove(i,1);
             bChan = true;
         }
     }
     if(!bChan) return;
-    Warn("AccessPlus was found in serverpackages!");
+    Warn(PackageName @ "was found in ServerPackages!");
     Class'GameEngine'.Static.StaticSaveConfig();
     foreach AllObjects(Class'GameEngine',GE)
     {
