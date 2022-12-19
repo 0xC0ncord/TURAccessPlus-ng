@@ -210,7 +210,7 @@ exec function Help(string S)
         HelpMessage("Global-Admin - Commands");
         HelpMessage("GetGlobalAdminPassword :: SetGlobalAdminPassword");
         HelpMessage("CreateAdminAccount :: DeleteAdminAccount");
-        HelpMessage("NameAdminAccount :: PrivilagesAdminAccount :: PasswordAdminAccount");
+        HelpMessage("NameAdminAccount :: PrivilegesAdminAccount :: PasswordAdminAccount");
         HelpMessage("-----------");
         HelpMessage("Co-Admin - Commands");
         HelpMessage("Fly :: Ghost :: Walk :: Spider :: Slap :: Fatality :: Rename :: Invis :: God :: HeadSize :: PlayerSize");
@@ -2009,11 +2009,11 @@ exec function PasswordAdminAccount(int AdminSlot, string Password)
 
 final exec function SetACPriv(int AdminSlot, string Privilages)
 {
-    PrivilagesAdminAccount(AdminSlot, Privilages);
+    PrivilegesAdminAccount(AdminSlot, Privilages);
 }
 
-// Set the admin Privilages for admin account of AdminSlot to Privilages
-exec function PrivilagesAdminAccount(int AdminSlot, string Privilages)
+// Set the admin Privileges for admin account of AdminSlot to Privileges
+exec function PrivilegesAdminAccount(int AdminSlot, string Privileges)
 {
     local int NumAdmins;
 
@@ -2033,10 +2033,10 @@ exec function PrivilagesAdminAccount(int AdminSlot, string Privilages)
         return;
     }
 
-    uManager.AdminGroup[AdminSlot].AdminPrivileges = Privilages;
+    uManager.AdminGroup[AdminSlot].AdminPrivileges = Privileges;
     uManager.SaveConfig();
 
-    Note("Changed"@uManager.AdminGroup[AdminSlot].AdminNickName$"'s admin account privileges to"@Privilages);
+    Note("Changed"@uManager.AdminGroup[AdminSlot].AdminNickName$"'s admin account privileges to"@Privileges);
 }
 
 // Shows the list of admin accounts
@@ -2055,7 +2055,7 @@ exec function ListAdminAccounts()
     }
 
     for(CurAdmin = 0; CurAdmin < NumAdmins; CurAdmin ++)
-        ClientMessage("Slot:"$CurAdmin@"Owner:"$uManager.AdminGroup[CurAdmin].AdminNickName@"Name:"$uManager.AdminGroup[CurAdmin].AdminName@"Password:"$uManager.AdminGroup[CurAdmin].AdminPassword@"Privilages:"$uManager.AdminGroup[CurAdmin].AdminPrivileges);
+        ClientMessage("Slot:"$CurAdmin@"Owner:"$uManager.AdminGroup[CurAdmin].AdminNickName@"Name:"$uManager.AdminGroup[CurAdmin].AdminName@"Password:"$uManager.AdminGroup[CurAdmin].AdminPassword@"Privileges:"$uManager.AdminGroup[CurAdmin].AdminPrivileges);
 }
 //==============================================================================
 
