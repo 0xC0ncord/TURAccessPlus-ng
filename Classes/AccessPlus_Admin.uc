@@ -47,9 +47,6 @@ function bool CanDo(string Cmd)
 
 exec function Admin(string CommandLine)
 {
-    // Testing whether overriding this works
-    AdminBroadcast(CommandLine@"test");
-    
     if(!CanDo(CommandLine))
     {
         Note("You are not allowed to execute command"@CommandLine);
