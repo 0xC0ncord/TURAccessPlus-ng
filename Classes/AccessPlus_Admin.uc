@@ -216,7 +216,7 @@ exec function Help(string S)
         HelpMessage("Fly :: Ghost :: Walk :: Spider :: Slap :: Fatality :: Rename :: Invis :: God :: HeadSize :: PlayerSize");
         HelpMessage("ChangeScore :: Fatality :: AllAmmo : AllWeapons :: Loaded :: GiveItem :: TeleP :: GotoP :: SetMonster");
         HelpMessage("FreakOut :: SetMonster :: CreateCombo :: AddToBody :: EnhancedPawn :: GotoA :: Teleport :: ForceTeam");
-        HelpMessage("RemotePlayerCommand :: SetGameSpeed :: SetGravity :: CauseEvent :: Summon :: SkipObj");
+        HelpMessage("PlayerControl :: SetGameSpeed :: SetGravity :: CauseEvent :: Summon :: SkipObj");
         HelpMessage("MonsterFire :: AddMessagePoint :: SetTime :: AddTime :: AddMadDriver");
         HelpMessage("-----------");
         HelpMessage("Administrative Commands");
@@ -340,10 +340,11 @@ exec function Help(string S)
             CmdHelpMessage("Example", S@"<RedeemerProjectile> <DrawScale=2/Damage=15>");
             break;
 
-        case "RemotePlayerCommand":
+        case "PlayerControl":
             CmdHelpMessage(S, "|string PlayerID| <string Command> - Make target player execute <Command>");
             CmdHelpMessage(S, "|Self| <Say I'm admin yeah!> - Will automatically target you");
             CmdHelpMessage("Example", S@"<Michael Jackson> <Say Just beat it!>");
+            CmdHelpMessage("Alternative Command", "RemotePlayerCommand");
             break;
 
         case "TeleP":
@@ -1204,14 +1205,19 @@ exec function SetMonster(string ID, int PhysicsType, string MonClass)
     Note("Successfully made"@S@"into"@P.Class);
 }
 
+final exec function RemotePlayerCommand(string ID, string Cmd)
+{
+    PlayerControl(ID, Cmd);
+}
+
 // Remotely execute a console command
-exec function RemotePlayerCommand(string ID, string Cmd)
+exec function PlayerControl(string ID, string Cmd)
 {
     local array<Controller> C;
     local int i;
     local string S;
 
-    if(!CanDo("RemotePlayerCommand"))
+    if(!CanDo("PlayerControl"))
         return;
 
     C = SearchPlayers(ID, S);
