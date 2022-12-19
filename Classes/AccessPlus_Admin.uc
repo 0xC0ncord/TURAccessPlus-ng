@@ -206,20 +206,21 @@ exec function Help(string S)
     if(S == "")
     {
         HelpMessage("-----------");
-        HelpMessage("Use ('Help <Command Name>' for closer info)");
-        HelpMessage("Global-Admin - Commands");
+        HelpMessage("Use ('Help <Command Name>' for more info on a specific command)");
+        HelpMessage("Global-Admin Commands");
         HelpMessage("GetGlobalAdminPassword :: SetGlobalAdminPassword");
         HelpMessage("CreateAdminAccount :: DeleteAdminAccount");
         HelpMessage("NameAdminAccount :: PrivilegesAdminAccount :: PasswordAdminAccount");
         HelpMessage("-----------");
-        HelpMessage("Co-Admin - Commands");
+        HelpMessage("Co-Admin Commands");
         HelpMessage("Fly :: Ghost :: Walk :: Spider :: Slap :: Fatality :: Rename :: Invis :: God :: HeadSize :: PlayerSize");
         HelpMessage("ChangeScore :: Fatality :: AllAmmo : AllWeapons :: Loaded :: GiveItem :: TeleP :: GotoP :: SetMonster");
         HelpMessage("FreakOut :: SetMonster :: CreateCombo :: AddToBody :: EnhancedPawn :: GotoA :: Teleport :: ForceTeam");
         HelpMessage("RemotePlayerCommand :: SetGameSpeed :: SetGravity :: CauseEvent :: Summon :: SkipObj");
         HelpMessage("MonsterFire :: AddMessagePoint :: SetTime :: AddTime :: AddMadDriver");
         HelpMessage("-----------");
-        HelpMessage("Kick :: KickBann :: ListBans :: ListTempBans :: UnBan :: UnBanTemp");
+        HelpMessage("Administrative Commands");
+        HelpMessage("GetID :: Kick :: KickBanN :: ListBans :: ListTempBans :: UnBan :: UnBanTemp");
         HelpMessage("AddServerPackage :: RemoveServerPackage :: ListServerPackages :: Set :: SetSave");
         HelpMessage("GetConnections :: GetAddress :: MapVote :: ReloadCache");
         HelpMessage("AdminMessage :: PrivateMessage");
@@ -471,8 +472,9 @@ exec function Help(string S)
             CmdHelpMessage("Example", S@"|1000| <Engine.Mover>");
             break;
 
-        case "ListIds":
+        case "GetID":
             CmdHelpMessage(S, "<None> - Displays a id list of the current players");
+            CmdHelpMessage("Alternative Command", "ListPlayerIDs");
             break;
 
         case "GetConnections":
