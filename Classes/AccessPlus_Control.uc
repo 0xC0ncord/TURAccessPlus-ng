@@ -421,7 +421,7 @@ function bool MayExecute(PlayerController Other, string Cmd)
                 Other.ClientMessage("You need to be logged in as global administrator to execute this command");
                 return false;
             }
-            else if(AdminPrivileges[i].BlockedCommands[0]=="All")
+            else if(AdminPrivileges[i].BlockedCommands[0]~="All")
             {
                 Other.ClientMessage("You are currently unable to execute any admin commands");
                 return false;
