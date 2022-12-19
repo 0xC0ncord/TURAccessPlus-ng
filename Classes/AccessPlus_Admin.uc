@@ -173,8 +173,6 @@ final function Actor FindActor(name ATag)
     }
 }
 
-final function array<Controller> GetAllControllers();
-
 final function string CreateColor(Color Color)
 {
     return uManager.MyMutator.MakeColorCode(Color);
