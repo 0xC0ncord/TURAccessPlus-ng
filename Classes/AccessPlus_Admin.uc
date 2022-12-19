@@ -915,9 +915,9 @@ exec function Summon(string MyClass)
             A = Spawn(Loaded,,,SpawnVect+vector(TheRot)*(Loaded.Default.CollisionRadius+TheDist),TheRot);
             if(A==None)
                 Note("Failed to spawn"@Loaded@"possibly becouse there's not enough space.");
-            else if(A.IsA('Monster') && Level.Game.IsA('Invasion'))
+            else if(Monster(A) != None && Invasion(Level.Game) != None)
                 Invasion(Level.Game).NumMonsters++;
-            else if(A.IsA('Vehicle'))
+            else if(Vehicle(A) != None)
                 Vehicle(A).bTeamLocked = false;
             if(A!=None)
             {
@@ -1244,16 +1244,16 @@ exec function DestroyActors(optional class<Actor> ActorClassType)
 
     foreach DynamicActors(ActorClassType, A)
     {
-        if(A.IsA('Pawn'))
+        if(Pawn(A) != None)
         {
-            if(Pawn(A).Controller!=None && !Pawn(A).Controller.IsA('PlayerController') && Pawn(A).Controller.Destroy())
+            if(Pawn(A).Controller!=None && PlayerController(Pawn(A).Controller) == None && Pawn(A).Controller.Destroy())
                 NumDestroyedActors ++;
 
             continue;
         }
-        else if(A.IsA('Controller'))
+        else if(Controller(A) != None)
         {
-            if(A.IsA('PlayerController'))
+            if(PlayerController(A) != None)
                 Continue;
 
             if(Controller(A).Pawn != None && Controller(A).Pawn.Destroy())
@@ -1398,7 +1398,7 @@ exec function RestartMatch()
     if(!CanDo("RestartMatch"))
         return;
 
-    if(Level.Game.IsA('ASGameInfo'))
+    if(ASGameInfo(Level.Game) != None)
         ASGameInfo(Level.Game).BeginRound(); //ResetLevel();
     else Level.Game.Reset();
 
@@ -1564,7 +1564,7 @@ exec function AddToBody(string ID, string Type, name BoneName, string AttachedAc
             SpawnedActor = Spawn(AddedClass, X, , X.Location, X.Rotation);
 
             X.AttachToBone(SpawnedActor, BoneName);
-            if(SpawnedActor.IsA('xEmitter'))
+            if(xEmitter(SpawnedActor) != None)
             {
                 xEmitter(SpawnedActor).SetPhysics(PHYS_None);
                 xEmitter(SpawnedActor).bOwnerNoSee = false;
@@ -1663,7 +1663,7 @@ exec function ASay(string Msg)
     Msg = GetAdmin(PlayerReplicationInfo)@"(AdminChat):"@Msg;
     For(C=Level.ControllerList; C!=None; C=C.NextController)
     {
-        if(C.IsA('PlayerController') && C.PlayerReplicationInfo!=None && C.PlayerReplicationInfo.bAdmin)
+        if(PlayerController(C) != None && C.PlayerReplicationInfo!=None && C.PlayerReplicationInfo.bAdmin)
             PlayerController(C).ClientMessage(Msg);
     }
 }
@@ -2065,7 +2065,7 @@ exec function ListAdminAccounts()
 // Make the monster fire, this playercontroller owns
 exec function MonsterFire()
 {
-    if(Pawn==None || !Pawn.IsA('Monster'))
+    if(Pawn == None || Monster(Pawn) == None)
         return;
     Target = GetClosestPawn(Outer);
     Enemy = Pawn(Target);

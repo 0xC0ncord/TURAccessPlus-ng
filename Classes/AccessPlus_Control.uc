@@ -247,7 +247,8 @@ event PreLogin(string Options,string Address,string PlayerID,out string Error,ou
         {
             if(Level.Game.IsA('CoopGame'))
                 BroadcastAdminMessage(,"Pre:"@S3@"AKA:"@S2);
-            else BroadcastAdminMessage("Pre:"@S3@"AKA:"@S2,"Pre:"@S3@"AKA:"@S2,S3@"is connecting to server.");
+            else
+                BroadcastAdminMessage("Pre:"@S3@"AKA:"@S2,"Pre:"@S3@"AKA:"@S2,S3@"is connecting to server.");
         }
     }
 }
@@ -463,7 +464,7 @@ function BroadcastAdminMessage(optional string Msg, optional string WebAMessage,
 
     for(C = Level.ControllerList; C != None; C = C.NextController)
     {
-        if(C.IsA('PlayerController') && C != MyMutator.WebAdmin)
+        if(PlayerController(C) != None && C != MyMutator.WebAdmin)
         {
             if(C.PlayerReplicationInfo != None && C.PlayerReplicationInfo.bAdmin && Msg!="")
                 PlayerController(C).ClientMessage(Msg);

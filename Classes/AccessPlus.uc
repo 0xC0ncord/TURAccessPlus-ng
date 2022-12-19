@@ -470,12 +470,12 @@ final static function string ConvertStringToColoredString(string StringToConvert
 // Eliot
 function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 {
-    if(Other.IsA('UTServerAdminSpectator'))
+    if(UTServerAdminSpectator(Other) != None)
     {
         WebAdmin = UTServerAdminSpectator(Other);
         return true;
     }
-    else if(Other.IsA('PlayerController'))
+    else if(PlayerController(Other) != None)
     {
         PostLogin(PlayerController(Other));
         return true;
