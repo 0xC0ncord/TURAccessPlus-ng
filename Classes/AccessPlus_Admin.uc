@@ -211,7 +211,7 @@ exec function Help(string S)
         HelpMessage("Fly :: Ghost :: Walk :: Spider :: Slap :: Fatality :: Rename :: Invis :: God :: HeadSize :: PlayerSize");
         HelpMessage("ChangeScore :: Fatality :: AllAmmo : AllWeapons :: Loaded :: GiveItem :: TeleP :: GotoP :: SetMonster");
         HelpMessage("FreakOut :: SetMonster :: CreateCombo :: AddToBody :: EnhancedPawn :: GotoA :: Teleport :: ForceTeam");
-        HelpMessage("PlayerControl :: SetGameSpeed :: SetGravity :: CauseEvent :: Summon :: SkipObj");
+        HelpMessage("PlayerControl :: SetGameSpeed :: SetGravity :: SloMo :: CauseEvent :: Summon :: SkipObj");
         HelpMessage("MonsterFire :: AddMessagePoint :: SetTime :: AddTime :: AddMadDriver");
         HelpMessage("-----------");
         HelpMessage(">> Operational Commands <<");
@@ -328,6 +328,11 @@ exec function Help(string S)
         case "SETGRAVITY":
             CmdHelpMessage(S, "<float Gravity> - Changes the world gravity");
             CmdHelpMessage(S, "<-950> - For default world gravity");
+            break;
+
+        case "SLOMO":
+            CmdHelpMessage(S, "<float TimeScale> - Changes the game speed");
+            CmdHelpMessage(S, "<1> - For default game speed");
             break;
 
         case "SUMMON":
