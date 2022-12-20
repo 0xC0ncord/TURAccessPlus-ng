@@ -27,6 +27,16 @@ struct sTempBan
         BannedDays;
 };
 
+struct sMute
+{
+    var string
+        MutedGuid,
+        MutedPlayerName;
+
+    var int
+        MutedDays;
+};
+
 struct sAdminPriv
 {
     var PlayerReplicationInfo
@@ -65,13 +75,21 @@ var const color
     
 var() config array<sAdmins>             AdminGroup;
 var() config array<sTempBan>            TempBannedPlayers;
+var() config array<sMute>               MutedPlayers;
 var() private globalconfig string       GlobalAdminPW;
 var() config array<sLoggedClientsType>  ClientsLog;
+
+var AccessPlus_BroadcastHandler BroadcastHandler;
 
 function PostBeginPlay()
 {
     Super.PostBeginPlay();
+
     CleanOutOldBans();
+    CleanOutOldMutes();
+
+    BroadcastHandler = Spawn(class'AccessPlus_BroadcastHandler');
+    Level.Game.BroadcastHandler.RegisterBroadcastHandler(BroadcastHandler);
 }
 
 function bool IsAdmin(PlayerController P)
@@ -92,6 +110,25 @@ function CleanOutOldBans() // Clear out old temp banned players.
         {
             TempBannedPlayers[i] = TempBannedPlayers[j-1];
             TempBannedPlayers.Length = j-1;
+            j--;
+        }
+    }
+}
+
+function CleanOutOldMutes()
+{
+    local int j, i, d;
+
+    j = MutedPlayers.Length;
+    if(j == 0)
+        return;
+    d = GetDayNumber();
+    For(i = 0; i < j; i++)
+    {
+        if(MutedPlayers[i].MutedDays <= d)
+        {
+            MutedPlayers[i] = MutedPlayers[j -1];
+            MutedPlayers.Length = j - 1;
             j--;
         }
     }
@@ -176,6 +213,45 @@ function int PlayerIsBanned(string ID)
                 j--; // Old ban, clear it.
             }
             else return TempBannedPlayers[i].BannedDays-d;
+        }
+    }
+    return 0;
+}
+
+function MutePlayer(PlayerController Muted, PlayerController Muter, int NumDays)
+{
+    local int i;
+
+    i = MutedPlayers.Length;
+    MutedPlayers.Length = i + 1;
+    MutedPlayers[i].MutedGuid = Muted.GetPlayerIDHash();
+    MutedPlayers[i].MutedDays = GetDayNumber() + NumDays;
+    MutedPlayers[i].MutedPlayerName = Muted.PlayerReplicationInfo.PlayerName;
+    Muted.ClientMessage("You have been muted by an admin for" @ NumDays @ Eval((NumDays == 1), "day", "days") $ ".");
+    Level.Game.BroadcastHandler.Broadcast(Muted, Muted.PlayerReplicationInfo.PlayerName @ "has been muted for" @ NumDays @ Eval((NumDays == 1), "day.", "days."));
+    SaveConfig();
+}
+
+function int PlayerIsMuted(string ID)
+{
+    local int j, i, d;
+
+    j = MutedPlayers.Length;
+    if(j == 0)
+        return 0;
+    d = GetDayNumber();
+    for(i = 0; i < j; i++)
+    {
+        if(MutedPlayers[i].MutedGUID ~= ID)
+        {
+            if(MutedPlayers[i].MutedDays <= d)
+            {
+                MutedPlayers[i] = MutedPlayers[j - 1];
+                MutedPlayers.Length = j - 1;
+                j--; // Old mute, clear it.
+            }
+            else
+                return MutedPlayers[i].MutedDays - d;
         }
     }
     return 0;

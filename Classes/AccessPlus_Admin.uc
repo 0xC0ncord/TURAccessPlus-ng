@@ -233,8 +233,8 @@ exec function Help(string S)
             HelpMessage("Use ('Help <Command Name>' for more info on a specific command)");
             HelpMessage(">> Admin Commands <<");
             HelpMessage("GetID :: Kick :: KickBanN :: ListBans :: ListTempBans :: UnBan :: UnBanTemp :: FreakOut");
-            HelpMessage("AddServerPackage :: RemoveServerPackage :: ListServerPackages :: Set :: SetSave");
-            HelpMessage("GetConnections :: GetAddress :: MapVote :: ReloadCache");
+            HelpMessage("Mute :: ListMutes :: UnMute :: AddServerPackage :: RemoveServerPackage :: ListServerPackages");
+            HelpMessage("Set :: SetSave :: GetConnections :: GetAddress :: MapVote :: ReloadCache");
             HelpMessage("Map :: RestartMap :: NextMap :: MapList :: Switch :: Open");
             HelpMessage("PlayerList :: Rename :: ForceTeam :: PlayerControl");
             HelpMessage("AdminMessage :: PrivateMessage");
@@ -493,6 +493,19 @@ exec function Help(string S)
 
         case "UNBANTEMP":
             CmdHelpMessage(S, "<int TempBanSlot> - UnBanTemp <int TempBanSlot>");
+            break;
+
+        case "MUTE":
+            CmdHelpMessage(S, "<string PlayerID> <int Days> - Mutes a player from text chat for <Days>");
+            CmdHelpMessage("<Days>", "1 = 1 day, 7 = One week");
+            break;
+
+        case "LISTMUTES":
+            CmdHelpMessage(S, "<None> - Displays a list of currently muted players");
+            break;
+
+        case "UNMUTE":
+            CmdHelpMessage(S, "<int MuteSlot> - UnMute <int MuteSlot>");
             break;
         //
 
@@ -2068,6 +2081,83 @@ exec function UnBanTemp(int Slot)
     For(i=Slot; i<j; i++)
         uManager.TempBannedPlayers[i] = uManager.TempBannedPlayers[i+1];
     uManager.TempBannedPlayers.Length = j;
+    uManager.SaveConfig();
+}
+
+exec function Mute(int ID, int Days)
+{
+    local Controller C;
+
+    if(!CanDo("Mute"))
+        return;
+
+    C = PlayerController(FindPlayerByID(ID));
+    if(C == None)
+    {
+        ClientMessage("Target ID not found.");
+        return;
+    }
+
+    if(Days == 0)
+    {
+        Note("You cannot mute someone permanently!");
+        return;
+    }
+
+    PlayerController(C).ClientMessage("You've been muted.");
+    AMessage("Muted" @ C.PlayerReplicationInfo.PlayerName $ ".");
+    uManager.MutePlayer(PlayerController(C), Outer, Days);
+}
+
+exec function ListMutes()
+{
+    local int i, j;
+
+    ClientMessage("Currently muted players:");
+    j = uManager.MutedPlayers.Length;
+    if(j == 0)
+    {
+        Note("There are currently no muted players");
+        return;
+    }
+    for(i = 0; i < j; i++)
+        Note("Mute slot" @ i $ ":" @ uManager.MutedPlayers[i].MutedPlayerName @ uManager.MutedPlayers[i].MutedGuid);
+}
+
+exec function UnMute(int Slot)
+{
+    local int i, j;
+    local Controller C;
+
+    if(!CanDo("UnMute"))
+        return;
+
+    j = uManager.MutedPlayers.Length;
+    if(j == 0)
+    {
+        Note("There is currently nobody muted.");
+        return;
+    }
+
+    if(Slot < 0 || Slot >= j)
+    {
+        Note("Mute slot is out of range (0-" $ ( j - 1 ) $ ")");
+        return;
+    }
+
+    for(C = Level.ControllerList; C != None; C = C.NextController)
+    {
+        if(PlayerController(C) != None && PlayerController(C).GetPlayerIDHash() ~= uManager.MutedPlayers[i].MutedGuid)
+        {
+            PlayerController(C).ClientMessage("You've been unmuted.");
+            break;
+        }
+    }
+    AMessage("Unmuted" @ uManager.MutedPlayers[Slot].MutedPlayerName $ ".");
+    j--;
+    for(i = Slot; i < j; i++)
+        uManager.MutedPlayers[i] = uManager.MutedPlayers[i + 1];
+    uManager.MutedPlayers.Length = j;
     uManager.SaveConfig();
 }
 //==============================================================================
