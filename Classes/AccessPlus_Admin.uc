@@ -198,34 +198,59 @@ exec function AdminHelp(string S)
 
 exec function Help(string S)
 {
-    if(S == "")
-    {
-        HelpMessage("-----------");
-        HelpMessage("Use ('Help <Command Name>' for more info on a specific command)");
-        HelpMessage(">> Global-Admin Commands <<");
-        HelpMessage("GetGlobalAdminPassword :: SetGlobalAdminPassword");
-        HelpMessage("CreateAdminAccount :: DeleteAdminAccount");
-        HelpMessage("NameAdminAccount :: PrivilegesAdminAccount :: PasswordAdminAccount");
-        HelpMessage("-----------");
-        HelpMessage(">> Co-Admin Commands <<");
-        HelpMessage("Fly :: Ghost :: Walk :: Spider :: Slap :: Fatality :: Rename :: Invis :: God :: HeadSize :: PlayerSize");
-        HelpMessage("ChangeScore :: Fatality :: AllAmmo : AllWeapons :: Loaded :: GiveItem :: TeleP :: GotoP :: SetMonster");
-        HelpMessage("FreakOut :: SetMonster :: CreateCombo :: AddToBody :: EnhancedPawn :: GotoA :: Teleport :: ForceTeam");
-        HelpMessage("PlayerControl :: SetGameSpeed :: SetGravity :: SloMo :: CauseEvent :: Summon :: SkipObj");
-        HelpMessage("MonsterFire :: AddMessagePoint :: SetTime :: AddTime :: AddMadDriver");
-        HelpMessage("-----------");
-        HelpMessage(">> Operational Commands <<");
-        HelpMessage("GetID :: Kick :: KickBanN :: ListBans :: ListTempBans :: UnBan :: UnBanTemp");
-        HelpMessage("AddServerPackage :: RemoveServerPackage :: ListServerPackages :: Set :: SetSave");
-        HelpMessage("GetConnections :: GetAddress :: MapVote :: ReloadCache");
-        HelpMessage("AdminMessage :: PrivateMessage");
-        HelpMessage("-----------");
-        return;
-    }
-
-    HelpMessage("<> = Required, || = Optional, ** = Global admin command");
+    HelpMessage("-----------");
+    HelpMessage("<> = Required, || = Optional");
     switch(Caps(S))
     {
+        case "":
+            HelpMessage("Admin Help Global -> List global admin commands.");
+            HelpMessage("Admin Help Cheats -> List commands for various cheats.");
+            HelpMessage("Admin Help Admin  -> List administrative commands.");
+            HelpMessage("Admin Help Misc   -> List miscellaneous commands.");
+            HelpMessage("Admin Help Debug  -> List commands used for debugging.");
+            break;
+
+        // Categories
+        case "GLOBAL":
+            HelpMessage("Use ('Help <Command Name>' for more info on a specific command)");
+            HelpMessage(">> Global-Admin Commands <<");
+            HelpMessage("GetGlobalAdminPassword :: SetGlobalAdminPassword");
+            HelpMessage("CreateAdminAccount :: DeleteAdminAccount");
+            HelpMessage("NameAdminAccount :: PrivilegesAdminAccount :: PasswordAdminAccount");
+            break;
+        case "CHEATS":
+        case "CHEAT":
+            HelpMessage("Use ('Help <Command Name>' for more info on a specific command)");
+            HelpMessage(">> Cheat Commands <<");
+            HelpMessage("GetGlobalAdminPassword :: SetGlobalAdminPassword");
+            HelpMessage("Fly :: Ghost :: Walk :: Spider :: Slap :: Fatality :: Invis :: God :: HeadSize :: PlayerSize");
+            HelpMessage("ChangeScore :: ChangeTeamScore :: Fatality :: AllAmmo : AllWeapons :: Loaded :: GiveItem");
+            HelpMessage("TeleP :: GotoP :: SetMonster :: CreateCombo :: AddToBody :: EnhancedPawn :: GotoA :: Teleport");
+            HelpMessage("Resurrect :: SloMo :: SetGameSpeed :: SetGravity :: CauseEvent :: Summon :: SkipObj :: NextWave");
+            HelpMessage("MonsterFire :: SetTime :: AddTime :: AddMadDriver");
+            break;
+        case "ADMIN":
+            HelpMessage("Use ('Help <Command Name>' for more info on a specific command)");
+            HelpMessage(">> Admin Commands <<");
+            HelpMessage("GetID :: Kick :: KickBanN :: ListBans :: ListTempBans :: UnBan :: UnBanTemp :: FreakOut");
+            HelpMessage("AddServerPackage :: RemoveServerPackage :: ListServerPackages :: Set :: SetSave");
+            HelpMessage("GetConnections :: GetAddress :: MapVote :: ReloadCache");
+            HelpMessage("Map :: RestartMap :: NextMap :: MapList :: Switch :: Open");
+            HelpMessage("PlayerList :: Rename :: ForceTeam :: PlayerControl");
+            HelpMessage("AdminMessage :: PrivateMessage");
+            break;
+        case "MISC":
+        case "MISCELLANEOUS":
+            HelpMessage("Use ('Help <Command Name>' for more info on a specific command)");
+            HelpMessage(">> Miscellaneous Commands <<");
+            HelpMessage("AddMessagePoint :: AddMapActor :: FlushMapActors");
+            break;
+        case "DEBUG":
+            HelpMessage("Use ('Help <Command Name>' for more info on a specific command)");
+            HelpMessage(">> Debug Commands <<");
+            HelpMessage("Crash");
+            break;
+
         // Global Admin                                                       \\
         case "GETGLOBALADMINPASSWORD":
             CmdHelpMessage("** "$S, "- Displays current global admin password");
@@ -320,6 +345,12 @@ exec function Help(string S)
             CmdHelpMessage(S, "|Self| <1337> - Will automatically target you");
             break;
 
+        case "CHANGETEAMSCORE":
+            CmdHelpMessage(S, "<string Team> <int Score> - Changes target team's score");
+            CmdHelpMessage("<string Team>", "0/Red, 1/Blue, 2/Green, 3/Gold");
+            break;
+
+        case "SLOMO":
         case "SETGAMESPEED":
             CmdHelpMessage(S, "<float SpeedScaling> - Changes the game speed");
             CmdHelpMessage(S, "<1.1> - For default speed scaling");
@@ -330,14 +361,13 @@ exec function Help(string S)
             CmdHelpMessage(S, "<-950> - For default world gravity");
             break;
 
-        case "SLOMO":
-            CmdHelpMessage(S, "<float TimeScale> - Changes the game speed");
-            CmdHelpMessage(S, "<1> - For default game speed");
-            break;
-
         case "SUMMON":
             CmdHelpMessage(S, "<string Class> <string Properties> - Spawns an actor of type <Class>");
             CmdHelpMessage("Example", S@"<RedeemerProjectile> <DrawScale=2/Damage=15>");
+            break;
+
+        case "RESSURECT":
+            CmdHelpMessage(S, "<string PlayerID> |int Health| |int Shield| - Make a player come back to life");
             break;
 
         case "PLAYERCONTROL":
@@ -360,6 +390,11 @@ exec function Help(string S)
         case "GOTOA":
             CmdHelpMessage(S, "|string PlayerID| <name ActorTag> |vector Offset| - Teleport target player to <class ActorToTeleportTo>");
             CmdHelpMessage(S, "|Self| <Mover1> - Will automatically target you");
+            break;
+
+        case "TELEPORT":
+            CmdHelpMessage(S, "|string PlayerID| |int Distance| - Teleport to the specified distance in front of the specified player");
+            CmdHelpMessage(S, "|Self| - Will automatically target you");
             break;
 
         case "LOADED":
@@ -394,6 +429,10 @@ exec function Help(string S)
 
         case "SKIPOBJ":
             CmdHelpMessage(S, "<None> - Skips the current assault objective");
+            break;
+
+        case "NEXTWAVE":
+            CmdHelpMessage(S, "<None> - Kills all alive enemy monsters and proceeds to the next Invasion wave");
             break;
 
         case "CAUSEEVENT":
@@ -494,6 +533,43 @@ exec function Help(string S)
         case "MAPVOTE":
             CmdHelpMessage(S, "<string Action> - Execute an action in VotingHandler");
             CmdHelpMessage("<string Action>", "Cancel = Cancel the current map votes, Begin = Force mid-game map voting");
+            break;
+
+        case "MAP":
+            CmdHelpMessage(S, "<string Map> <string Sub-Command> - Performs the specified sub-command.");
+            CmdHelpMessage("<string Sub-Command>", "Restart = Reload the current map, Next = Switch to the next map in rotation, List = Show the current map list, ... = Absolute map and option switching");
+            CmdHelpMessage("Example", S@"<Restart>");
+            CmdHelpMessage("Example", S@"<DM-Rankin?Game=SkaarjPack.Invasion?Mutator=XWeapons.MutArena>");
+            break;
+
+        case "RESTARTMAP":
+            CmdHelpMessage(S, "<None> - Reloads the current map");
+            break;
+
+        case "NEXTMAP":
+            CmdHelpMessage(S, "<None> - Changes the map to the next map in the map playlist");
+            break;
+
+        case "MAPLIST":
+            CmdHelpMessage(S, "<None> - Shows the current map list");
+            break;
+
+        case "SWITCH":
+        case "OPEN":
+            CmdHelpMessage(S, "<string Absolute> - Switches the map and optionally gametype, mutators, etc.");
+            CmdHelpMessage("Example", S@"<DM-Rankin?Game=SkaarjPack.Invasion?Mutator=XWeapons.MutArena>");
+            break;
+
+        case "PLAYERLIST":
+            CmdHelpMessage(S, "<None> - Prints a list of players and their pings");
+            break;
+
+        case "ADDMAPACTOR":
+            CmdHelpMessage(S, "<string Class> - Adds the given actor to this map");
+            break;
+
+        case "FLUSHMAPACTORS":
+            CmdHelpMessage(S, "<None> - Removes all map actors from this map");
             break;
 
         //                                                                      \\
@@ -667,6 +743,46 @@ exec function ChangeScore(string ID, int newScoreValue)
         }
     }
     AMessage("Changed"@S@"score to"@newScoreValue);
+}
+
+exec function ChangeTeamScore(string Team, int NewScoreValue)
+{
+    local TeamInfo T;
+    local int TeamIndex;
+
+    if(!CanDo("ChangeTeamScore"))
+        return;
+
+    switch(Caps(Team))
+    {
+        case "0":
+        case "RED":
+            TeamIndex = 0;
+            break;
+        case "1":
+        case "BLUE":
+            TeamIndex = 1;
+            break;
+        case "2":
+        case "GREEN":
+            TeamIndex = 2;
+            break;
+        case "3":
+        case "GOLD":
+            TeamIndex = 3;
+            break;
+    }
+
+    foreach DynamicActors(class'TeamInfo', T)
+    {
+        if(T.TeamIndex == TeamIndex)
+        {
+            T.Score = NewScoreValue;
+            AMessage("Changed" @ T $ "'s score to" @ NewScoreValue $ ".");
+            return;
+        }
+    }
+    Note("Did not find a team to modify score.");
 }
 
 exec function SloMo(float SpeedScaling)
@@ -1091,6 +1207,34 @@ exec function SkipObj()
     Level.Game.DisableNextObjective();
 }
 
+exec function NextWave()
+{
+    local Monster M;
+
+    if(!CanDo("NextWave"))
+        return;
+
+    if(Invasion(Level.Game) != None)
+    {
+        foreach DynamicActors(class'Monster', M)
+        {
+            if(
+                PlayerController(M.Controller) == None
+                && !M.Controller.IsA('FriendlyMonsterController')
+            )
+            {
+                M.Died(None, class'DamTypeIonBlast', M.Location);
+            }
+        }
+        Invasion(Level.Game).NumMonsters = 0;
+        Invasion(Level.Game).bWaveInProgress = false;
+        Invasion(Level.Game).WaveCountDown = 15;
+        Invasion(Level.Game).WaveNum++;
+    }
+    else
+        Note("Can't skip the wave because this is not an Invasion game!");
+}
+
 // Change time on AS mode
 exec function SetTime(float TimeLimit)
 {
@@ -1144,6 +1288,53 @@ exec function Fatality(string ID)
         C[i].Pawn.Died(Outer, Class'DamTypeIonBlast', C[i].Pawn.Location);
     }
     Level.Game.BroadcastHandler.Broadcast(Outer, GetAdmin(PlayerReplicationInfo)@"Turned"@S@"into ashes!");
+}
+
+exec function Resurrect(string ID, int NewHealth, int NewShield)
+{
+    local array<Controller> C;
+    local int i;
+    local string S;
+
+    if(!CanDo("Resurrect"))
+        return;
+
+    C = SearchPlayers(ID, S);
+    if(!CheckControllers(C, true))
+        return;
+
+    for(i = 0; i < C.Length; i++)
+    {
+        if(C[i].PlayerReplicationInfo != None && !C[i].PlayerReplicationInfo.bOutOfLives)
+        {
+            Note(S @ "is not dead!");
+            return;
+        }
+
+        C[i].GotoState('PlayerWaiting');
+        C[i].PlayerReplicationInfo.bOutOfLives = false;
+        C[i].PlayerReplicationInfo.NumLives = 0;
+        Level.Game.RestartPlayer(C[i]);
+        C[i].ServerGivePawn();
+        if(C[i].Pawn == None)
+        {
+            Note(S @ "was not given a Pawn for some reason; skipping.");
+            continue;
+        }
+        if(PlayerController(C[i]) != None)
+        {
+            C[i].PlayerReplicationInfo.SetWaitingPlayer(false);
+            PlayerController(C[i]).ClientSetViewTarget(C[i].Pawn);
+            PlayerController(C[i]).ClientSetBehindView(false);
+        }
+
+        if(NewHealth > 0)
+            C[i].Pawn.Health = NewHealth;
+        if(NewShield > 0)
+            C[i].Pawn.ShieldStrength = NewShield;
+    }
+
+    Level.Game.BroadcastHandler.Broadcast(Outer, GetAdmin(PlayerReplicationInfo) @ "resurrected" @ S $ "!");
 }
 
 // Bored of your life? try another!
@@ -2541,13 +2732,18 @@ exec function Open(string URL)
         DoSwitch(URL);
 }
 
-// Restarts Server (Actualy crashes ;)).
-/*exec function Exit()
+final exec function Exit()
 {
-    if(!CanDo("Exit"))return;
-    Level.Game.Broadcast(Outer, "Server Closing by request.");
+    Crash();
+}
+
+// Restarts Server (Actualy crashes ;)).
+exec function Crash()
+{
+    if(!CanDo("Crash"))return;
+    Level.Game.Broadcast(Outer, "Server closing by admin command.");
     Assert(false);
-}*/
+}
 
 // BTimesMute features, moved to here
 exec function AddMapActor(string ActorClass)
