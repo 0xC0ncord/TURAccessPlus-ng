@@ -5,7 +5,8 @@
 Class AccessPlus Extends Mutator
     Config(AccessPlus);
 
-const Version = "2.00 Pre-Release";
+const Version = $$"__VERSION__"$$;
+const LongVersion = $$"__VERSIONSTRING__"$$;
 
 struct sMapActors
 {
@@ -97,7 +98,7 @@ function PreBeginPlay()
 {
     Log("", Name);
     Log("================================================", Name);
-    Log("=========="     $Name@Version$      "===========", Name);
+    Log(Class @ LongVersion);
     Log("================================================", Name);
     Log("", Name);
 
