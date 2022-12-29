@@ -248,7 +248,7 @@ exec function Help(string S)
         case "DEBUG":
             HelpMessage("Use ('Help <Command Name>' for more info on a specific command)");
             HelpMessage(">> Debug Commands <<");
-            HelpMessage("Crash");
+            HelpMessage("PlayerList :: Crash");
             break;
 
         // Global Admin                                                       \\
@@ -573,10 +573,6 @@ exec function Help(string S)
             CmdHelpMessage("Example", S@"<DM-Rankin?Game=SkaarjPack.Invasion?Mutator=XWeapons.MutArena>");
             break;
 
-        case "PLAYERLIST":
-            CmdHelpMessage(S, "<None> - Prints a list of players and their pings");
-            break;
-
         case "ADDMAPACTOR":
             CmdHelpMessage(S, "<string Class> - Adds the given actor to this map");
             break;
@@ -610,6 +606,15 @@ exec function Help(string S)
             CmdHelpMessage("Example", S@"<Engine.GameInfo> <TimeLimit> <6000>");
             break;
         //                                                                      \\
+
+        // Server configuration commands                                        \\
+        case "CRASH":
+            CmdHelpMessage(S, "<None> - Forcibly crashes the server with a failed assertion");
+            break;
+
+        case "PLAYERLIST":
+            CmdHelpMessage(S, "<None> - Prints a list of players and their pings");
+            break;
 
         default:
             Note("No help info found for '" $ S $ "'");
