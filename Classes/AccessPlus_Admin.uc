@@ -613,7 +613,7 @@ exec function Help(string S)
             break;
 
         case "PLAYERLIST":
-            CmdHelpMessage(S, "<None> - Prints a list of players and their pings");
+            CmdHelpMessage(S, "<None> - Prints a list of players and their pings to the server log");
             break;
 
         default:
